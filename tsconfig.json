@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "baseUrl": "./src",
+    "paths": {
+      "~/*": ["./*"]
+    },
+    "typeRoots": ["node_modules/@types"],
+    "lib": [
+      "ESNext",
+      "DOM"
+    ]
+  },
+  "include": ["src/**/*"]
+}
