@@ -2,12 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Conway</title>
   <script defer src="./main.ts"></script>
-  <link rel="stylesheet" href="main.css">
+  <link rel="stylesheet" href="main.scss">
 </head>
-<body>
+<body class="wrapper">
+  <section class="visualisation" id="visualisation"></section>
+  <section class="gui">
+    <header class="header">
+      <h1>Conway</h1>
+    </header>
+    <section class="settings">
+      <h2>Settings</h2>
+      <div>
+        <label for="solids">Solid</label>
+        <select id="solids"></select>
+      </div>
+    </section>
+    <main class="about">
+      <h2>About</h2>
+      <p>
+        Conway's Game of Life as a 3D mesh's texture
+      </p>
+      <p>
+        Inspired by this
+        <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#/media/File:Trefoil_knot_conways_game_of_life.gif">gif</a>
+        from
+        <a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life">Wikipedia</a>
+      </p>
+      <p>
+        Available solids
+        <ul>
+          <li>Trefoil knot</li>
+          <li>Torus</li>
+        </ul>
+      </p>
+    </main>
+    <footer class="footer">
+      <a href="https://github.com/KonradLinkowski/Conway">Source code</a>
+      <a href="https://github.com/KonradLinkowski">© Konrad Linkowski</a>
+    </footer>
+  </section>
 </body>
 </html>

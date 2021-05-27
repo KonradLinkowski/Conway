@@ -1,0 +1,58 @@
+body {
+  padding: 0;
+  margin: 0;
+  background-color: black;
+  color: white;
+  font-family: 'Lato';
+}
+
+a {
+  color: white;
+}
+
+.wrapper {
+  display: flex;
+  height: 100vh;
+  max-width: 100%;
+
+  @media (orientation: portrait) {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .visualisation {
+    flex: 1;
+
+    @media (orientation: portrait) {
+      height: min(100vmin, 80vh);
+      flex: 0 auto;
+    }
+    
+    canvas {
+      position: absolute;
+    }
+  }
+  
+  .gui {
+    flex-basis: 20rem;
+    border-left: 1px solid white;
+
+    @media (orientation: portrait) {
+      border-left: none;
+      border-top: 1px solid white;
+    }
+  }
+}
+
+.gui {
+  padding: 20px;
+
+  .header h1 {
+    font-size: 3rem;
+    margin: 10px 0;
+  }
+  .footer {
+    display: flex;
+    flex-direction: column;
+  }
+}

@@ -11,13 +11,18 @@ import {
   RGBAFormat,
   UnsignedByteType,
   UVMapping,
+  BufferGeometry,
+  TorusBufferGeometry,
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Conway } from "./conway";
 
+const $parent: HTMLElement = document.querySelector('#visualisation')
+const $solids: HTMLSelectElement = document.querySelector('#solids')
+
 const camera = new PerspectiveCamera(
   90,
-  window.innerWidth / window.innerHeight,
+  $parent.offsetWidth / $parent.offsetHeight,
   1,
   20000
 );
@@ -62,31 +67,41 @@ const dataTexture = new DataTexture(
 
 updateTexture();
 
-const geometry = new TorusKnotGeometry(10, 3, 100, 16);
-
-const material = new MeshBasicMaterial({
-  map: dataTexture,
-});
-const torus = new Mesh(geometry, material);
-scene.add(torus);
+const solids = createSolids([{
+  geometry: new TorusKnotGeometry(10, 3, 100, 16),
+  name: 'Trefoil knot'
+}, {
+  geometry: new TorusBufferGeometry(20, 3, 100, 32),
+  name: 'Torus'
+}])
 
 setInterval(updateTexture, 16)
 // end of game and torus knot
 
 const renderer = new WebGLRenderer({ antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+renderer.setSize($parent.offsetWidth, $parent.offsetHeight);
+$parent.appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera as any, renderer.domElement);
 
 window.addEventListener("resize", onWindowResize);
 
 function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = $parent.offsetWidth / $parent.offsetHeight;
   camera.updateProjectionMatrix();
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setSize($parent.offsetWidth, $parent.offsetHeight);
+}
+
+onSolidChange()
+$solids.addEventListener('change', onSolidChange)
+
+function onSolidChange() {
+  const { value } = $solids
+  for (const solid of solids) {
+    solid.mesh.visible = value == solid.name
+  }
 }
 
 animate();
@@ -102,7 +117,9 @@ function render() {
 
   controls.update();
 
-  torus.rotateY(delta);
+  for (const solid of solids) {
+    solid.mesh.rotateY(delta);
+  }
 
   renderer.render(scene, camera);
 }
@@ -122,4 +139,29 @@ function updateTexture() {
     }
   }
   dataTexture.needsUpdate = true;
+}
+
+// creates all solids !SIDE EFFECTS!
+function createSolids(solids: { geometry: BufferGeometry, name: string }[]) {
+  const result = []
+  for (const solid of solids) {
+    const geo = solid.geometry;
+
+    const material = new MeshBasicMaterial({
+      map: dataTexture,
+    });
+  
+    const mesh = new Mesh(geo, material);
+    scene.add(mesh);
+    result.push({
+      name: solid.name,
+      mesh
+    })
+
+    const $option = document.createElement('option')
+    $option.value = solid.name
+    $option.textContent = solid.name
+    $solids.appendChild($option)
+  }
+  return result
 }
